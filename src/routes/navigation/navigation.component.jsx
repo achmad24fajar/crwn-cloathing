@@ -30,7 +30,7 @@ const Navigation = () => {
             <span className='nav-link' onClick={signOutUser}>SIGN OUT</span>
           ) : (
             <Link to='/auth' className='nav-link'>
-              Sign In
+              SIGN IN
             </Link>
           )}
           <CartIcon />
