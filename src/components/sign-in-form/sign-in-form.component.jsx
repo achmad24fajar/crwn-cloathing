@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import { getRedirectResult } from 'firebase/auth';
+import { useDispatch } from 'react-redux/es/exports';
 import {
   auth,
   signInWithGooglePopup,
@@ -12,6 +12,7 @@ import {
 import './sign-in-form.styles.scss';
 import FormInput from '../form-input/form-input.component';
 import Button, {BUTTON_TYPE_CLASSES} from '../button/button.component';
+import { googleSignInStart, emailSignInStart } from '../../store/user/user.action';
 
 const defaultFormFields = {
   email: '',
@@ -19,24 +20,14 @@ const defaultFormFields = {
 };
 
 const SignIn = () => {
-  // useEffect(() => {
-  //   gettingRedirectResult();
-  // }, []);
-
-  // const gettingRedirectResult = async () => {
-  //   const response = await getRedirectResult(auth);
-  //   if(response){
-  //     const userDocRef = await getUserDocumentFromAuth(response.user);
-  //   }
-  // };
-
+  const dispatch = useDispatch()
   const [formField, setFormField] = useState(defaultFormFields);
   const { email, password } = formField;
 
   console.log(formField);
 
   const logGoogleUser = async () => {
-    await signInWithGooglePopup();
+    dispatch(googleSignInStart())
   };
 
   const resetFormField = () => {
@@ -50,7 +41,6 @@ const SignIn = () => {
       const {user} = await signInAuthUserWithEmailAndPassword(email, password);
       resetFormField()
     } catch (err) {
-      console.log(err.message)
       switch(err.message){
         case 'Firebase: Error (auth/wrong-password).':
           alert('Your password is wrong!')

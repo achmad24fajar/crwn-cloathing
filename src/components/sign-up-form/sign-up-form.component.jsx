@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import { getRedirectResult } from 'firebase/auth';
+import { useDispatch } from 'react-redux';
 import {
   auth,
   signInWithGooglePopup,
@@ -7,6 +7,7 @@ import {
   signInWithGoogleRedirect,
   createAuthUserWithEmailAndPassword,
 } from '../../utils/firebase/firebase.utils';
+import { signUpStart } from '../../store/user/user.action';
 
 import './sign-up-form.styles.scss'
 import FormInput from '../form-input/form-input.component';
@@ -20,7 +21,7 @@ const defaultFormFields = {
 }
 
 const SignUp = () => {
-
+  const dispatch = useDispatch();
   const [formField, setFormField] = useState(defaultFormFields);
   const {displayName, email, password, confirmPassword} = formField;
 
@@ -42,8 +43,7 @@ const SignUp = () => {
     }
 
     try{
-      const {user} = await createAuthUserWithEmailAndPassword(email, password);
-      await getUserDocumentFromAuth(user, {displayName});
+      dispatch(signUpStart(email, password, displayName))
       resetFormField()
     } catch(err) {
       if(err.code == 'auth/email-already-in-use'){
